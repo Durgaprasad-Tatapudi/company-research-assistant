@@ -1,117 +1,127 @@
-# Company Research Assistant
+# Enterprise AI Research Dashboard
 
-An AI-powered Company Research Assistant built for the **Relu Consultancy — AI & Automation Developer** hackathon.
+An intelligent, AI-powered Company Research application designed to perform deep data extraction, web crawling, and automated dossier generation. This project has been upgraded with a **Premium Enterprise-grade Dashboard UI** built on a strictly defined design system.
 
-Give it a company name or a website URL and it will:
+Give the system a company name or a website URL, and it will:
 
-1. Resolve the official website (if a name was given) via **Serper.dev**.
-2. **Crawl** the site's important pages (Home, About, Products, Services, Solutions, Contact, Pricing) — skipping duplicates, login pages, and irrelevant pages.
-3. Run **supporting search** for contact details and public context.
-4. Search for and rank **competitors** operating in the same country/industry.
-5. Send everything to an **OpenRouter** model of your choice to generate a summary, product list, AI-generated pain points, and competitor suggestions.
-6. Render it all in a **ChatGPT-style interface** with live progress indicators.
-7. Export a **professional PDF dossier** with one click.
-8. *(Bonus)* Push the report + PDF to a **Discord channel** via the Bot API.
-
----
-
-## Tech stack
-
-- **Next.js 14 (App Router, TypeScript)** — single unified project, frontend + API routes, deploys as one app.
-- **Tailwind CSS** — styling (dark "case file / dossier" visual theme).
-- **cheerio** — HTML parsing for the crawler.
-- **p-limit** — bounded concurrency for crawling.
-- **pdfkit** — server-side PDF generation.
-- **Serper.dev** — search API.
-- **OpenRouter** — AI model gateway (model selectable in the UI).
-- **Discord Bot API** — bonus notification + file upload.
-
-No database, no authentication, no persisted history — fully stateless per the assignment spec.
+1. **Resolve Identity:** Locate the official website and metadata via **Serper.dev**.
+2. **Intelligent Web Crawling:** Deep crawl critical pages (Home, About, Products, Services, Solutions, Contact, Pricing), automatically skipping irrelevant or duplicate pages.
+3. **Data Aggregation:** Gather context, public contact information, and business metrics.
+4. **Competitor Discovery:** Automatically rank and analyze industry competitors.
+5. **AI Reasoning:** Stream the aggregated dataset to an **OpenRouter** AI model of your choice to synthesize an executive summary, catalog products, deduce pain points, and map the competitive landscape.
+6. **Enterprise Interface:** Render the results in a premium, tabbed dashboard with live progress indicators and interactive UI components.
+7. **One-Click Export:** Generate and download a branded, professional PDF dossier instantly.
+8. **Discord Integration (Bonus):** Push generated reports and PDF attachments directly to a Discord channel.
 
 ---
 
-## Project structure
+## 🎨 Enterprise Design System
+The UI has been completely overhauled from a generic hackathon prototype to a scalable SaaS product:
+- **Clean Palette:** Strict adherence to a professional color hierarchy (`#F4F6F8` backgrounds, crisp `#FFFFFF` cards, and `#2563EB` primary accents).
+- **High Contrast:** Strictly enforces WCAG accessibility contrast ratios for maximum readability.
+- **Interactive Micro-animations:** Seamless slide-ups, fade-ins, and button hover states for a premium user experience.
 
-```
+---
+
+## 🛠 Tech Stack
+
+- **Framework:** [Next.js 14](https://nextjs.org/) (App Router, TypeScript)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/) with a custom `brand-*` theme
+- **Web Scraping:** `cheerio` (HTML parsing) & `p-limit` (Bounded concurrency)
+- **Document Generation:** `pdfkit` (Server-side PDF rendering)
+- **Search API:** [Serper.dev](https://serper.dev/)
+- **AI Gateway:** [OpenRouter](https://openrouter.ai/) (Allows toggling between Claude, GPT-4, etc.)
+- **Notifications:** Discord Bot API
+
+---
+
+## 📂 Project Structure
+
+```text
 company-research-assistant/
 ├── app/
-│   ├── page.tsx                 # Landing page (hero + chat UI)
-│   ├── layout.tsx
-│   ├── globals.css
+│   ├── page.tsx                 # Main application interface
+│   ├── layout.tsx               # Root layout
+│   ├── globals.css              # Core design tokens and CSS variables
 │   └── api/
-│       ├── research/route.ts    # Orchestrates crawl + search + AI, streams progress (SSE)
-│       ├── pdf/route.ts         # Report JSON -> downloadable PDF
-│       └── discord/route.ts     # Report JSON -> Discord channel message + PDF attachment
+│       ├── research/route.ts    # Orchestrates crawl + search + AI, streams SSE
+│       ├── pdf/route.ts         # Generates downloadable PDF from report JSON
+│       └── discord/route.ts     # Pushes message + PDF attachment to Discord
 ├── components/
-│   ├── ChatInterface.tsx        # Chat input, streaming progress, report list
-│   ├── ProgressIndicator.tsx    # Step-by-step "case file" progress ticker
-│   ├── ReportView.tsx           # Tabbed dossier display (Summary/Products/Pain Points/Competitors/Sources)
-│   └── DiscordSettings.tsx      # Bonus: Discord Bot Token / Channel ID / applicant info panel
+│   ├── ChatInterface.tsx        # Chat input, Sidebar, streaming progress UI
+│   ├── ProgressIndicator.tsx    # Step-by-step progress ticker
+│   ├── ReportView.tsx           # Tabbed Executive Dossier display
+│   ├── ResearchHistory.tsx      # Local storage history of past reports
+│   └── DiscordSettings.tsx      # Discord Integration configuration panel
 ├── lib/
-│   ├── serper.ts                # Serper.dev integration (site resolution, search, competitors)
-│   ├── crawler.ts                # Website crawler (page discovery, dedup, extraction)
-│   ├── openrouter.ts             # OpenRouter chat completion + structured JSON parsing
-│   ├── pdfGenerator.ts           # PDFKit report builder
-│   ├── discord.ts                # Discord Bot API notifier (multipart file upload)
-│   └── types.ts                  # Shared types + model list
+│   ├── serper.ts                # Serper.dev integration
+│   ├── crawler.ts               # Automated Website crawler
+│   ├── openrouter.ts            # AI Chat completions & structured JSON extraction
+│   ├── pdfGenerator.ts          # PDF builder logic
+│   ├── discord.ts               # Discord Bot API client
+│   └── types.ts                 # Shared TypeScript interfaces
 ├── .env.example
+├── .gitignore
+├── tailwind.config.ts           # Enterprise theme variables
 └── package.json
 ```
 
 ---
 
-## Setup
+## 🚀 Local Setup
 
+**1. Clone the repository**
 ```bash
-git clone <your-fork-url>
+git clone https://github.com/Durgaprasad-Tatapudi/company-research-assistant.git
 cd company-research-assistant
-npm install
-cp .env.example .env.local
-# fill in SERPER_API_KEY and OPENROUTER_API_KEY in .env.local
-npm run dev
 ```
 
-Open http://localhost:3000.
+**2. Install dependencies**
+```bash
+npm install
+```
 
-### Required environment variables
+**3. Configure Environment Variables**
+Copy the template and fill in your API keys:
+```bash
+cp .env.example .env.local
+```
+Update `.env.local` with your credentials:
+- `SERPER_API_KEY`: Get a key at [Serper.dev](https://serper.dev/)
+- `OPENROUTER_API_KEY`: Get a key at [OpenRouter](https://openrouter.ai/keys)
+
+**4. Start the Development Server**
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) to view the application.
+
+---
+
+## ⚙️ Configuration details
 
 | Variable | Required | Purpose |
 |---|---|---|
-| `SERPER_API_KEY` | Yes | Search integration (site resolution, contact info, competitors) — https://serper.dev |
-| `OPENROUTER_API_KEY` | Yes | AI reasoning — https://openrouter.ai/keys |
-| `APP_URL` | No | Sent as `HTTP-Referer` to OpenRouter; defaults to `http://localhost:3000` |
+| `SERPER_API_KEY` | **Yes** | Search integration (site resolution, competitors) |
+| `OPENROUTER_API_KEY` | **Yes** | AI reasoning |
+| `APP_URL` | No | Sent as `HTTP-Referer` to OpenRouter (default: `http://localhost:3000`) |
 
-**Discord Bot Token and Channel ID are entered in-app** (Discord Integration panel), per the assignment's requirement that the evaluator supplies them at evaluation time — they are never stored server-side.
-
----
-
-## Deployment (Vercel example)
-
-1. Push this repo to GitHub.
-2. Import it in [Vercel](https://vercel.com/new).
-3. Add `SERPER_API_KEY` and `OPENROUTER_API_KEY` as Environment Variables in the Vercel project settings.
-4. Deploy. Vercel builds the Next.js app automatically (`next build`).
-5. Set `APP_URL` to your production URL for a clean OpenRouter referrer (optional).
-
-The same steps apply to Netlify (`@netlify/plugin-nextjs`) or Cloudflare Pages (`next-on-pages`).
+> **Note:** The Discord Bot Token and Channel ID are entered via the **Discord Integration panel** directly in the UI. They are never stored server-side to maintain a stateless security posture.
 
 ---
 
-## How each requirement is satisfied
+## ☁️ Deployment (Vercel)
 
-- **Company Research** — `lib/serper.ts` + `lib/crawler.ts` + `lib/openrouter.ts` collect name, website, phone, address, products/services, and AI-generated pain points from the crawl + search context.
-- **Website Crawling** — `lib/crawler.ts` discovers Home/About/Products/Services/Solutions/Contact/Pricing pages from on-page links, dedupes by normalized path, skips login-hinted and non-HTML URLs, and extracts cleaned text.
-- **Search Integration** — `lib/serper.ts` wraps Serper.dev for site resolution, contact lookup, and competitor discovery.
-- **AI Integration** — `lib/openrouter.ts` calls OpenRouter's `/chat/completions` with a user-selectable `model` and enforces strict JSON output.
-- **Competitor Analysis** — dedicated Serper query + AI ranking returns 3–6 named competitors with websites.
-- **Interactive Chat Interface** — `components/ChatInterface.tsx`, streamed step-by-step via Server-Sent Events from `/api/research`.
-- **PDF Generation** — `lib/pdfGenerator.ts` (PDFKit) renders a branded, single-click-downloadable dossier via `/api/pdf`.
-- **Discord Integration (bonus)** — `components/DiscordSettings.tsx` + `/api/discord` + `lib/discord.ts` post the applicant/company details and attach the generated PDF to a Discord channel via the Bot API.
+1. Push your code to your GitHub repository.
+2. Log into [Vercel](https://vercel.com/) and click **Add New Project**.
+3. Import your GitHub repository.
+4. In the **Environment Variables** section, add `SERPER_API_KEY` and `OPENROUTER_API_KEY`.
+5. Click **Deploy**. Vercel will automatically build (`npm run build`) and host your Next.js application.
 
 ---
 
-## Notes & limitations
+## 📌 Technical Notes & Architecture
 
-- The crawler is same-origin and depth-1 (from links reachable from the homepage) — sufficient for typical marketing sites within the hackathon's time and API-cost budget; it can be extended to multi-level BFS if needed.
-- AI output is only as good as what was crawled/found; sparse public information will produce sparser summaries rather than fabricated detail.
-- Because there's no database, refreshing the page clears chat history by design (matches the "no report history required" requirement).
+- **Stateless Design:** No external database is required. The history component uses HTML5 `localStorage` to cache reports locally on the client.
+- **Server-Sent Events (SSE):** The `/api/research` endpoint heavily utilizes Node Streams to push real-time status updates and final payload generation directly to the UI.
+- **Crawler Scope:** The crawler operates entirely on a depth-1 breadth-first search from the resolved homepage to ensure operations complete within typical serverless execution timeouts.
